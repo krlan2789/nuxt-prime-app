@@ -1,0 +1,24 @@
+{
+	"files.associations": {
+		"*.css": "tailwindcss"
+	},
+	"editor.quickSuggestions": {
+		"strings": "on"
+	},
+	"editor.tabSize": 4,
+	"editor.indentSize": "tabSize",
+	"prettier.useTabs": true,
+	"prettier.semi": true,
+	"prettier.tabWidth": 4,
+	"autoimport.autoComplete": true,
+	"autoimport.useSemiColon": true,
+	"[vue]": {
+		"editor.tabSize": 4,
+		"editor.indentSize": "tabSize",
+		"prettier.useTabs": true,
+		"prettier.tabWidth": 4,
+		"prettier.semi": true
+	},
+	"tailwindCSS.classAttributes": ["class", "className", "ngClass", "class:list", "ui"],
+	"tailwindCSS.experimental.classRegex": [["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]]
+}

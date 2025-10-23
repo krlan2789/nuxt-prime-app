@@ -1,0 +1,9 @@
+# Ignore artifacts:
+build
+coverage
+.nuxt
+dist
+node_modules
+
+# Ignore files:
+*.md
