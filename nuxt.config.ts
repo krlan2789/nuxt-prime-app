@@ -1,11 +1,22 @@
 import tailwindcss from "@tailwindcss/vite";
-import Material from '@primeuix/themes/material';
+import Noir from './privmevue.theme';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 	compatibilityDate: '2025-07-15',
+	ssr: false,
 	devtools: { enabled: true },
 	css: ['~/assets/css/tailwind.css'],
+	app: {
+		head: {
+			link: [
+				{ rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png', },
+				{ rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png', },
+				{ rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png', },
+				{ rel: 'manifest', href: '/site.webmanifest', },
+			],
+		},
+	},
 	modules: [
 		'@nuxt/eslint',
 		'@nuxt/content',
@@ -15,7 +26,6 @@ export default defineNuxtConfig({
 		'@primevue/nuxt-module',
 	],
 	primevue: {
-		/* Configuration */
 		components: {
 			exclude: [],
 		},
@@ -25,27 +35,21 @@ export default defineNuxtConfig({
 			ripple: true,
 			inputVariant: 'filled',
 			theme: {
-				preset: Material,
+				preset: Noir,
 				options: {
 					prefix: 'p',
-					darkModeSelector: 'system',
-					// cssLayer: false,
+					darkModeSelector: '.my-app-dark',
 					cssLayer: {
 						name: 'primevue',
-						order: 'theme, base, primevue'
-					}
+						order: 'theme, base, primevue',
+					},
 				},
 			},
 		},
 	},
-	// appConfig: {
-	// 	nuxt: {
-	// 		dark: false,
-	// 	},
-	// },
 	vite: {
 		plugins: [
 			tailwindcss(),
 		],
 	},
-})
+});
