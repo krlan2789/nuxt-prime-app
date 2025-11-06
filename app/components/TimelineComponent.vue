@@ -6,13 +6,21 @@ defineProps<TimelineComponentProps>();
 </script>
 
 <template>
-	<div class="flex flex-col px-2 mx-auto font-normal w-full">
+	<section class="flex flex-col px-4 xl:px-0 mx-auto font-normal w-full">
+		<div class="flex justify-center align-middle w-full py-12">
+			<Divider align="center" type="solid">
+				<h2 class="text-2xl font-semibold text-primary">Latest {{ items.length < 25 ? items.length : 25 }}</h2>
+			</Divider>
+		</div>
 		<Timeline :value="items" :pt="{
+			root: {
+				class: 'pb-12',
+			},
 			eventContent: {
-				class: 'mb-8 ml-4 lg:mb-12 lg:ml-12 rounded-lg p-2 lg:p-4 bg-surface-100 7xl:flex-[4.7] 7xl:grow-[4.7] 7xl:shrink-[4.7] shadow-sm hover:shadow-md transition duration-200 scale-100 hover:scale-[100.5%]',
+				class: 'mb-8 ml-4 lg:mb-12 lg:ml-12 p-2 lg:p-4 bg-surface-100 7xl:flex-[4.7] 7xl:grow-[4.7] 7xl:shrink-[4.7] shadow-sm hover:shadow-md transition duration-200 scale-100 hover:scale-[100.5%]',
 			},
 			eventOpposite: {
-				class: '-translate-y-1 w-full min-w-4 max-w-16 lg:max-w-40',
+				class: '-translate-y-1 w-full min-w-8 max-w-16 sm:min-w-20 sm:max-w-28 xl:min-w-32 xl:max-w-40',
 			},
 		}">
 			<template #opposite="{ item }: { item: INoteContent }">
@@ -24,5 +32,5 @@ defineProps<TimelineComponentProps>();
 					:tags="item.tags"></ListItemComponent>
 			</template>
 		</Timeline>
-	</div>
+	</section>
 </template>

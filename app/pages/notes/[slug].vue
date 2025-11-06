@@ -35,19 +35,16 @@ useSeoMeta({
 </script>
 
 <template>
-	<UPage v-if="localPage" id="markdown" class="max-w-7xl mx-auto mb-16 px-4">
+	<UPage v-if="localPage" id="markdown" class="container mb-16 mt-14 sm:mt-18 px-6 xl:px-4">
 		<UPageHeader id="markdown-header" :title="localPage.title" :description="localPage.description" class="p-0">
 			<template #links>
-				<div v-if="localPage.tags && localPage.tags.length > 0" class="flex flex-wrap justify-center w-full gap-4">
+				<div v-if="localPage.tags && localPage.tags.length > 0"
+					class="flex flex-wrap justify-center w-full gap-4">
 					<template v-for="tag of localPage.tags">
 						<NuxtLink :to="'/notes/' + tag">
-							<Tag
-								:key="tag"
-								:value="'#' + tag"
-								class="text-xs"
+							<Tag :key="tag" :value="'#' + tag" class="text-xs"
 								:severity="severityOptions[localPage.tags.indexOf(tag) % severityOptions.length]"
-								rounded
-							>
+								rounded>
 							</Tag>
 						</NuxtLink>
 					</template>

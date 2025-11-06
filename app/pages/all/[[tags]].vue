@@ -48,6 +48,8 @@ useSeoMeta({
 </script>
 
 <template>
-	<TagFiltersComponent class="max-w-7xl w-full pb-6 px-3 pt-4 mx-auto" :tags @selected="onTagSelected" />
-	<ListComponent class="max-w-7xl w-full pb-8 px-3 mx-auto" :items="filteredNotes" />
+	<div class="container px-6 xl:px-4 mt-14 sm:mt-18">
+		<TagFiltersComponent class="w-full pb-6 pt-12 mx-auto" :tags @selected="onTagSelected" />
+		<ListComponent class="w-full pb-8 mx-auto" :items="filteredNotes" />
+	</div>
 </template>

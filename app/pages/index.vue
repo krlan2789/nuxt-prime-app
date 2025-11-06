@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const targetComponent = ref<Element | ComponentPublicInstance | null>(null);
+
 const notes = await loadAllNotes({ latestFirst: true });
 const metaTitle = appName + " | Erlan Kurnia";
 const metaDesc = appTagline;
@@ -12,5 +14,6 @@ useSeoMeta({
 </script>
 
 <template>
-	<TimelineComponent class="max-w-7xl w-full pb-8 mx-auto" :items="notes" />
+	<HeroComponent :scroll-target="targetComponent" :total-notes="notes.length" class="w-full mx-auto" />
+	<TimelineComponent :ref="(ref) => targetComponent = ref" class="container pt-14 md:pt-18" :items="notes" />
 </template>

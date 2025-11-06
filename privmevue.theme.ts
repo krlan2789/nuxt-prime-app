@@ -28,6 +28,7 @@ import {
 const primary = englishViolet;
 
 const customPreset: Preset<LaraBaseDesignTokens> = {
+	css: 'rounded-none hover:rounded-none',
 	primitive: {
 		emerald: emerald,
 		green: green,
@@ -82,10 +83,16 @@ const customPreset: Preset<LaraBaseDesignTokens> = {
 				},
 			},
 		},
+		content: {
+			borderRadius: '',
+		},
+		formField: {
+			borderRadius: '0',
+		},
 	},
 	components: {
 		dataview: {
-			css: "border-0",
+			css: "border-0 rounded-none",
 			paginatorBottom: {
 				borderWidth: "0",
 				borderColor: "transparent",
@@ -104,7 +111,7 @@ const customPreset: Preset<LaraBaseDesignTokens> = {
 			},
 		},
 		paginator: {
-			css: "border-0",
+			css: "border-0 rounded-none",
 			root: {
 				padding: "0",
 			},
@@ -119,6 +126,69 @@ const customPreset: Preset<LaraBaseDesignTokens> = {
 						background: "transparent",
 					},
 				},
+			},
+		},
+		panel: {
+			css: 'rounded-none hover:rounded-none',
+			root: {
+				borderRadius: '0',
+			},
+			header: {
+				borderRadius: '0',
+			},
+		},
+		tag: {
+			css: 'rounded-none',
+			root: {
+				borderRadius: '0',
+			},
+		},
+		chip: {
+			css: 'rounded-none',
+			root: {
+				borderRadius: '0',
+			},
+		},
+		badge: {
+			css: 'rounded-none',
+			root: {
+				borderRadius: '0',
+			},
+		},
+		button: {
+			css: 'rounded-none hover:rounded-none',
+			root: {
+				borderRadius: '0',
+				roundedBorderRadius: '0',
+			},
+		},
+		card: {
+			root: {
+				borderRadius: '0',
+			},
+		},
+		dialog: {
+			root: {
+				borderRadius: '0',
+			},
+		},
+		menubar: {
+			root: {
+				borderRadius: '0',
+			},
+			mobileButton: {
+				borderRadius: '0',
+			},
+			submenu: {
+				borderRadius: '0',
+			},
+			baseItem: {
+				borderRadius: '0',
+			},
+		},
+		panelmenu: {
+			panel: {
+				borderRadius: '0',
 			},
 		},
 	},

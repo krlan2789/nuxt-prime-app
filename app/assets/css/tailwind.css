@@ -13,6 +13,12 @@
 	}
 }
 
+@layer utilities {
+	.container {
+		@apply max-w-7xl mx-auto w-full;
+	}
+}
+
 @layer components {
 	.p-menubar-start {
 		@apply flex flex-row grow w-max;
