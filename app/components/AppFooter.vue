@@ -36,22 +36,21 @@
 				<h3 class="text-md font-semibold mb-4">Stay Connected</h3>
 				<div class="flex space-x-4 mb-4">
 					<a href="https://github.com/krlan2789" target="_blank">
-						<Button icon="pi pi-github" size="small" severity="secondary" aria-label="GitHub"></Button>
+						<Button icon="pi pi-github" size="small" severity="primary" aria-label="GitHub"></Button>
 					</a>
 					<a href="https://web.facebook.com/krlan2789" target="_blank">
-						<Button icon="pi pi-facebook" size="small" severity="secondary" aria-label="Facebook"></Button>
+						<Button icon="pi pi-facebook" size="small" severity="primary" aria-label="Facebook"></Button>
 					</a>
 					<a href="https://www.instagram.com/krlan2789" target="_blank">
-						<Button icon="pi pi-instagram" size="small" severity="secondary"
-							aria-label="Instagram"></Button>
+						<Button icon="pi pi-instagram" size="small" severity="primary" aria-label="Instagram"></Button>
 					</a>
 					<a href="https://www.linkedin.com/in/krlan2789" target="_blank">
-						<Button icon="pi pi-linkedin" size="small" severity="secondary" aria-label="Linkedin"></Button>
+						<Button icon="pi pi-linkedin" size="small" severity="primary" aria-label="Linkedin"></Button>
 					</a>
 				</div>
 				<!-- <InputGroup>
 					<InputText placeholder="Your email" class="bg-surface-100 text-surface-700" />
-					<Button label="Subscribe" icon="pi pi-envelope" severity="secondary"></Button>
+					<Button label="Subscribe" icon="pi pi-envelope" severity="primary"></Button>
 				</InputGroup> -->
 			</div>
 			<!-- Social & Newsletter -->

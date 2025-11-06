@@ -7,8 +7,15 @@ defineProps<TimelineComponentProps>();
 
 <template>
 	<section class="flex flex-col px-4 xl:px-0 mx-auto font-normal w-full">
-		<div class="flex justify-center align-middle w-full py-12">
-			<Divider align="center" type="solid">
+		<div class="flex justify-center align-middle w-full py-12 bg-surface-0">
+			<Divider align="center" type="solid" :pt="{
+				root: {
+					class: 'bg-surface-0',
+				},
+				content: {
+					class: 'bg-surface-0',
+				},
+			}">
 				<h2 class="text-2xl font-semibold text-primary">Latest {{ items.length < 25 ? items.length : 25 }}</h2>
 			</Divider>
 		</div>
