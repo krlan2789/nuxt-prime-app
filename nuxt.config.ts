@@ -52,11 +52,11 @@ export default defineNuxtConfig({
 			},
 		},
 	},
-	mdc: {
-		components: {
-			prose: false,
-		},
-	},
+	// mdc: {
+	// 	components: {
+	// 		prose: false,
+	// 	},
+	// },
 	components: [
 		"~/components",
 		{
@@ -73,11 +73,10 @@ export default defineNuxtConfig({
 		"@nuxt/image",
 		"@primevue/nuxt-module",
 		"@nuxt/fonts",
-		"@nuxtjs/mdc",
 	],
 	primevue: {
 		components: {
-			exclude: [],
+			exclude: ['editor', 'toast'],
 		},
 		usePrimeVue: true,
 		autoImport: true,
@@ -99,5 +98,9 @@ export default defineNuxtConfig({
 	},
 	vite: {
 		plugins: [tailwindcss()],
+		logLevel: 'info',
+		build: {
+			sourcemap: true,
+		},
 	},
 });
