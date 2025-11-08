@@ -1,5 +1,5 @@
 export default [
-	"primary",
+	// "primary",
 	// 'secondary',
 	"success",
 	"info",

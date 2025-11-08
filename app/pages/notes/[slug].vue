@@ -42,7 +42,7 @@ useSeoMeta({
 					class="flex flex-wrap justify-center w-full gap-4">
 					<template v-for="tag of localPage.tags">
 						<NuxtLink :to="'/all/' + tag">
-							<Tag :key="tag" :value="'#' + tag" class="text-xs"
+							<Tag :key="tag" :value="'#' + tag" class="text-xs rounded-none"
 								:severity="severityOptions[localPage.tags.indexOf(tag) % severityOptions.length]"
 								rounded>
 							</Tag>

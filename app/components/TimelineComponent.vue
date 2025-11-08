@@ -29,6 +29,10 @@ defineProps<TimelineComponentProps>();
 			eventOpposite: {
 				class: '-translate-y-1 w-full min-w-8 max-w-16 sm:min-w-20 sm:max-w-28 xl:min-w-32 xl:max-w-40',
 			},
+			eventMarker: {
+				class: 'rounded-none rotate-45',
+			},
+
 		}">
 			<template #opposite="{ item }: { item: INoteContent }">
 				<small class="text-surface-500 w-full">{{ new Date("" + item.date).toDateString()

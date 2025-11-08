@@ -47,8 +47,8 @@ onUnmounted(() => {
 			<p v-if="date" class="text-[10px] text-surface-500 opacity-80 leading-loose lg:text-xs w-auto">
 				{{ new Date(date).toDateString() }}
 			</p>
-			<Badge v-if="isShortcutAvailable" severity="info" :value="'CTRL+' + index"
-				class="absolute -top-7 -right-11">
+			<Badge v-if="isShortcutAvailable" :value="'CTRL+' + index"
+				class="absolute -top-7 -left-2 italic font-light">
 			</Badge>
 		</div>
 		<p class="text-sm text-surface-500 leading-tight line-clamp-1" v-html="description"></p>
