@@ -1,4 +1,4 @@
-import type NoteCommentModel from "~~/server/models/NoteCommentModel";
+import type NoteCommentModel from "~~/server/libs/models/NoteCommentModel";
 
 export const CommentServiceToken = "ICommentService";
 

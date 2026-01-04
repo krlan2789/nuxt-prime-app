@@ -1,4 +1,4 @@
-import BaseResponseDto from "~~/server/dtos/BaseResponseDto";
+import BaseResponseDto from "~~/server/libs/dtos/BaseResponseDto";
 import containerRegistry from "~~/server/libs/container-registry";
 import { IS3ClientService, S3ClientServiceToken } from "~~/server/libs/contracts/IS3ClientService";
 

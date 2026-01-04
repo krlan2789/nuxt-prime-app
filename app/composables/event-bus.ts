@@ -1,4 +1,4 @@
-import type IEventBus from "~/utils/contracts/IEventBus";
+import type IEventBus from "~/utils/interfaces/IEventBus";
 import CustomEventBusService from "~/utils/services/CustomEventBusService";
 
 type EventBusType = { eventBus: IEventBus };

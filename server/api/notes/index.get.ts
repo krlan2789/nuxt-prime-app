@@ -1,4 +1,4 @@
-import BaseResponseDto from "~~/server/dtos/BaseResponseDto";
+import BaseResponseDto from "~~/server/libs/dtos/BaseResponseDto";
 import containerRegistry from "~~/server/libs/container-registry";
 import { CacheServiceToken, ICacheService } from "~~/server/libs/contracts/ICacheService";
 import { INoteService, NoteServiceToken } from "~~/server/libs/contracts/INoteService";

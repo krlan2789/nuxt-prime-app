@@ -1,4 +1,4 @@
-import BaseResponseDto from "~~/server/dtos/BaseResponseDto";
+import BaseResponseDto from "~~/server/libs/dtos/BaseResponseDto";
 
 export default defineEventHandler(async () => {
 	const res: BaseResponseDto = {

@@ -1,6 +1,6 @@
-import BaseResponseDto from "~~/server/dtos/BaseResponseDto";
-import CreateCommentDto from "~~/server/dtos/CreateCommentDto";
-import NoteCommentModel from "~~/server/models/NoteCommentModel";
+import BaseResponseDto from "~~/server/libs/dtos/BaseResponseDto";
+import CreateCommentDto from "~~/server/libs/dtos/CreateCommentDto";
+import NoteCommentModel from "~~/server/libs/models/NoteCommentModel";
 import containerRegistry from "~~/server/libs/container-registry";
 import { CommentServiceToken, ICommentService } from "~~/server/libs/contracts/ICommentService";
 

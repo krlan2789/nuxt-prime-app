@@ -1,4 +1,4 @@
-import type { EventBusType } from "~/utils/services/CustomEventBusService";
+import type { EventBusType } from "~/utils/interfaces/IEventBus";
 
 export interface TagFiltersComponentProps {
 	tags: string[];

@@ -1,75 +1,112 @@
-# Nuxt Minimal Starter
+# Kiroku - Personal Note Web App
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Client-Side
 
-## Setup
+### Event Bus
 
-Make sure to install dependencies:
+Use composable `/app/composables/event-bus.ts` to manage events that can used across components.
 
-```bash
-# npm
-npm install
+- Set and unset event:
 
-# pnpm
-pnpm install
+  ```typescript
+  const { eventBus } = useEventBus();
 
-# yarn
-yarn install
+  const onShow = () => {
+    // Do something
+  };
 
-# bun
-bun install
-```
+  const onClicked = (someParam: string) => {
+    // Do something
+  };
 
-## Development Server
+  onMounted(async () => {
+    eventBus.$on('do-something-show', onShow);
+    eventBus.$on('do-something-clicked', onClicked);
+  });
 
-Start the development server on `http://localhost:3000`:
+  onUnmounted(() => {
+    eventBus.$off('do-something-show', showDialog);
+    eventBus.$off('do-something-clicked', onClicked);
+  });
+  ```
 
-```bash
-# npm
-npm run dev
+- Emit the event:
 
-# pnpm
-pnpm dev
+  ```typescript
+  const { eventBus } = useEventBus();
 
-# yarn
-yarn dev
+  eventBus.$emit('do-something-show');
 
-# bun
-bun run dev
-```
+  const onClick = (someParam: string) => {
+    eventBus.$emit('do-something-clicked', someParam);
+  };
+  ```
 
-## Production
+## Server-Side
 
-Build the application for production:
+### Services
 
-```bash
-# npm
-npm run build
+- Create a contracts in `/server/libs/contracts/`, usually created as interface.
+- Implement the interface to a class in `/server/services/`.
+- Register and resolve it with [Container Registry](#container-registration).
 
-# pnpm
-pnpm build
+### Container Registration
 
-# yarn
-yarn build
+Use `/server/libs/container-registry.ts` in `/server/plugins/services-registry.server.ts` to implement dependency injection. This implementation of dependency injection is inspired by `ASP.NET Core`.
 
-# bun
-bun run build
-```
+- Register as singleton:
 
-Locally preview production build:
+  ```typescript
+  import containerRegistry from "~~/server/libs/container-registry";
+  import { ISomeService, SomeServiceToken } from "~~/server/libs/contracts/ISomeService";
+  import { SomeService } from "~~/server/services/some-service";
 
-```bash
-# npm
-npm run preview
+  containerRegistry.registerSingleton<ISomeService>(
+    SomeServiceToken,
+    new SomeService()
+  );
+  ```
 
-# pnpm
-pnpm preview
+- Register as scoped:
 
-# yarn
-yarn preview
+  ```typescript
+  import { H3Event, EventHandlerRequest } from "h3";
+  import containerRegistry from "~~/server/libs/container-registry";
+  import { ISomeService, SomeServiceToken } from "~~/server/libs/contracts/ISomeService";
+  import { SomeService } from "~~/server/services/some-service";
 
-# bun
-bun run preview
-```
+  containerRegistry.registerScoped<ISomeService>(
+    SomeServiceToken,
+    (eventRequest: H3Event<EventHandlerRequest>) => new SomeService(eventRequest)
+  );
+  ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+- Register as transient:
+
+  ```typescript
+  import { H3Event, EventHandlerRequest } from "h3";
+  import containerRegistry from "~~/server/libs/container-registry";
+  import { ISomeService, SomeServiceToken } from "~~/server/libs/contracts/ISomeService";
+  import { SomeService } from "~~/server/services/some-service";
+
+  containerRegistry.registerTransient<ISomeService>(
+    SomeServiceToken,
+    (eventRequest: H3Event<EventHandlerRequest>) => new SomeService(eventRequest)
+  );
+  ```
+
+- Resolve a scoped instance:
+
+  ```typescript
+  import containerRegistry from "~~/server/libs/container-registry";
+
+  const someService = containerRegistry.resolve<ISomeService>(SomeServiceToken, eventRequest);
+  ```
+
+- Resolve a singleton or transient instance:
+
+  ```typescript
+  import containerRegistry from "~~/server/libs/container-registry";
+
+  const someService = containerRegistry.resolve<ISomeService>(SomeServiceToken);
+  ```

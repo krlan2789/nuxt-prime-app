@@ -1,5 +1,5 @@
 import IComment from "~~/app/utils/models/IComment";
-import BaseResponseDto from "~~/server/dtos/BaseResponseDto";
+import BaseResponseDto from "~~/server/libs/dtos/BaseResponseDto";
 import containerRegistry from "~~/server/libs/container-registry";
 import { CommentServiceToken, ICommentService } from "~~/server/libs/contracts/ICommentService";
 

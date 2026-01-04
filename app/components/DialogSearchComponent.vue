@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { useEventBus } from "~/composables/event-bus";
 import { DialogSearchEventName, type DialogSearchComponentProps } from "./DialogSearchComponent.props";
 import type INoteContent from "~/utils/models/INoteContent";
 import { ListItemEventName, type IListItemData } from "./ListItemComponent.props";
@@ -13,7 +12,7 @@ const { eventBus } = useEventBus();
 
 watch(searchKeyword, async (keyword) => {
 	if (keyword?.length > 0) {
-		const res = await fetchAllNotes({ path: "live-search", latestFirst: true, keyword });
+		const res = await fetchAllNotes({ latestFirst: true, keyword });
 		// console.log(keyword);
 		// console.log(res);
 		filteredNotes.value = res ?? [];
@@ -52,7 +51,7 @@ const onResultClicked = (data: IListItemData) => {
 	hideDialog();
 };
 
-onMounted(async () => {
+onMounted(() => {
 	eventBus.$on(DialogSearchEventName.OnShow, showDialog);
 	eventBus.$on(DialogSearchEventName.OnHide, hideDialog);
 	eventBus.$on(ListItemEventName.OnItemClicked, onResultClicked);
@@ -67,17 +66,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<Dialog
-		v-model:visible="visible"
-		modal
-		:style="{ width: '50rem' }"
-		class="bg-surface-0 origin-top h-[92vh]"
-		dismissable-mask
-		close-on-escape
-		block-scroll
-		:draggable="false"
-		:breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-	>
+	<Dialog v-model:visible="visible" modal :style="{ width: '50rem' }" class="bg-surface-0 origin-top h-[92vh]"
+		dismissable-mask close-on-escape block-scroll :draggable="false"
+		:breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
 		<template #header>
 			<SearchBarComponent class="w-full mr-2" @search="onFindByKeyword" autofocus />
 		</template>

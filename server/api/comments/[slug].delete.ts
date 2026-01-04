@@ -1,4 +1,4 @@
-import DeleteCommentDto from "~~/server/dtos/DeleteCommentDto";
+import DeleteCommentDto from "~~/server/libs/dtos/DeleteCommentDto";
 
 export default defineEventHandler(async (event) => {
 	const slug = getRouterParam(event, "slug");

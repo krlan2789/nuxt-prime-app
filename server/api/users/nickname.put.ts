@@ -1,5 +1,5 @@
-import BaseResponseDto from "~~/server/dtos/BaseResponseDto";
-import UpdateNicknameDto from "~~/server/dtos/UpdateNicknameDto";
+import BaseResponseDto from "~~/server/libs/dtos/BaseResponseDto";
+import UpdateNicknameDto from "~~/server/libs/dtos/UpdateNicknameDto";
 import containerRegistry from "~~/server/libs/container-registry";
 import { FirebaseServiceToken, IFirebaseService } from "~~/server/libs/contracts/IFirebaseService";
 

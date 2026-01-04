@@ -1,5 +1,5 @@
 import { H3Event, EventHandlerRequest } from "h3";
-import type NoteCommentModel from "~~/server/models/NoteCommentModel";
+import type NoteCommentModel from "~~/server/libs/models/NoteCommentModel";
 import containerRegistry from "~~/server/libs/container-registry";
 import { ICommentService } from "~~/server/libs/contracts/ICommentService";
 import { FirebaseServiceToken, IFirebaseService } from "~~/server/libs/contracts/IFirebaseService";
