@@ -23,7 +23,17 @@ export class S3ClientService implements IS3ClientService {
 			Key: key.startsWith('/') ? key.substring(1) : key,
 		});
 
-		// console.log("GetObjectCommand:", command);
+		const response = await this.s3Client.send(command);
+		const text = await response.Body?.transformToString();
+		return { data: text, lastModified: response.LastModified };
+	}
+
+	async fetchStringSecretObject(key: string): Promise<S3ObjectData | undefined> {
+		const command = new GetObjectCommand({
+			Bucket: process.env.S3_SECRET_BUCKET_NAME as string,
+			Key: key.startsWith('/') ? key.substring(1) : key,
+		});
+
 		const response = await this.s3Client.send(command);
 		// console.log("ContentType:", response.ContentType);
 		// console.log("LastModified:", response.LastModified);

@@ -10,6 +10,7 @@ export type S3ObjectData = {
 
 export interface IS3ClientService {
 	fetchStringObject(key: string): Promise<S3ObjectData | undefined>;
+	fetchStringSecretObject(key: string): Promise<S3ObjectData | undefined>;
 	fetchBufferObject(key: string): Promise<S3ObjectData | undefined>;
 	generateSignedUrl(key: string): Promise<string | undefined>;
 	sendMarkdownObject(key: string, body: string): Promise<void>;
