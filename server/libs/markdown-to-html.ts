@@ -54,13 +54,26 @@ class MarkdownToHtml {
 			const token = tokens[i];
 
 			if (token.type === "fence" && token.tag === "code") {
-				const originalContent = token.info ? hljs.highlight(token.content, { language: token.info }).value : hljs.highlightAuto(token.content).value;
+				let originalContent = ""; //token.info ? hljs.highlight(token.content, { language: token.info }).value : hljs.highlightAuto(token.content).value;
+				const lang = token.info ? token.info.trim().split(/\s+/)[0] : '';
+
+				if (lang && hljs.getLanguage(lang)) {
+					try {
+						originalContent = hljs.highlight(token.content, { language: lang }).value;
+					} catch (_) {
+						originalContent = this.mdit.utils.escapeHtml(token.content);
+					}
+				} else {
+					originalContent = this.mdit.utils.escapeHtml(token.content);
+				}
+
+				const btnId = 'btn-copy-code-' + this.rawCodeList.length;
 				const html = `
 					<div id="markdown-code-container" class="relative hljs">
 						<span class="code-snippet-hint">
 							Type or copy the command/code below
 						</span>
-						<button type="button" id="${'btn-copy-code-' + this.rawCodeList.length}" class="copy-btn">
+						<button type="button" id="${btnId}" class="copy-btn">
 							${this.originalCopyLabel}
 						</button>
 						<pre id="markdown-code-content" class="">
