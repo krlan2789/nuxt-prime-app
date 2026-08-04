@@ -20,7 +20,6 @@ class ContainerRegistry {
     resolve<T>(token: string, event?: H3Event<EventHandlerRequest>): T | undefined {
         const entry = this.registry.get(token);
         let instance: any | undefined;
-        // console.log(`ContainerRegistry.${token}.entry:`, entry);
         if (entry?.lifetime == "singleton") {
             instance = entry?.instance as T;
         } else if (entry?.lifetime == "transient") {

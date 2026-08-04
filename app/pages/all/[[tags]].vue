@@ -40,7 +40,6 @@ const filteredNotes = computed(() => {
 
 const onTagSelected = (tags: string[]) => {
 	selectedTags.value = new Set(tags);
-
 	router.replace({
 		name: route.name,
 		params: {

@@ -9,7 +9,6 @@ export default async (type: string, url: string): Promise<string> => {
 				readmeUrl = window.location.origin + url;
 				break;
 		}
-		// console.log(readmeUrl);
 		const res = await fetch(readmeUrl);
 		return await res.text();
 	}

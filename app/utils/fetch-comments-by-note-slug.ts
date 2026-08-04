@@ -6,6 +6,5 @@ export default async (slug: string) => {
 		method: "GET",
 		headers: { Authorization: `Bearer ${userToken}` },
 	});
-	// console.log('Commenst.fetched:', res);
 	return res.data;
 };

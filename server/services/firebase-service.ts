@@ -106,7 +106,6 @@ export class FirebaseService implements IFirebaseService {
             issuer: `https://securetoken.google.com/${FIREBASE_PROJECT_ID}`,
             audience: FIREBASE_PROJECT_ID,
         });
-        // console.log('verifyToken.payload:', payload);
         // { provider_id, iss, aud, auth_time, user_id, sub, iat, exp, firebase: { identities, sign_in_provider } }
         return payload;
     }

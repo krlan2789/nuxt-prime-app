@@ -8,8 +8,6 @@ export const useAnonAuth = async () => {
 		},
 	});
 
-	// console.log('anon.res:', res);
-
 	return {
 		userId: res.data.userId,
 		userToken: res.data.userToken,

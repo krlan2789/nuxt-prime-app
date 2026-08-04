@@ -19,7 +19,6 @@ export class CommentService implements ICommentService {
      */
     async getComments(host: string, slug: string): Promise<NoteCommentModel[]> {
         const data = await this.firebaseService.fetchDocument(`host/${host}/notes/${slug}/comments`);
-        // console.log('fetchComments.data:', data);
         let docs: NoteCommentModel[] = [];
         if (data?.documents) {
             docs = data.documents.map(
@@ -34,7 +33,6 @@ export class CommentService implements ICommentService {
                     }) as NoteCommentModel,
             ) as NoteCommentModel[];
             docs.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-            // console.log(docs);
         }
         return docs;
     }

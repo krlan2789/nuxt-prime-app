@@ -13,8 +13,6 @@ const { eventBus } = useEventBus();
 watch(searchKeyword, async (keyword) => {
 	if (keyword?.length > 0) {
 		const res = await fetchAllNotes({ latestFirst: true, keyword });
-		// console.log(keyword);
-		// console.log(res);
 		filteredNotes.value = res ?? [];
 	} else {
 		filteredNotes.value = [];
@@ -23,7 +21,6 @@ watch(searchKeyword, async (keyword) => {
 
 let timer = 0;
 const onFindByKeyword = (keyword: string) => {
-	// console.log(keyword);
 	if (timer > 0) clearTimeout(timer);
 	timer = setTimeout((searchKeyword.value = keyword.toLowerCase()), 500);
 };

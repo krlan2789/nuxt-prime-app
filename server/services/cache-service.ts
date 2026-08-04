@@ -10,11 +10,9 @@ export class CacheService implements ICacheService {
 
     async set<T extends CacheTypeValue>(key: string, value: T): Promise<void> {
         await this.storage.setItem<T>(key, value, this.storageOption);
-        // console.log(`${key} added in cache with value:`, value);
     }
 
     async get<T extends CacheTypeValue>(key: string): Promise<T | null> {
-        // console.log(`Get ${key} in cache with value:`);
         return await this.storage.getItem<T>(key, { defaultValue: null });
     }
 
