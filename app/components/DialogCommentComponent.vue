@@ -57,7 +57,6 @@ const hideDialog = () => {
 
 const handleShortcut = async (e: KeyboardEvent) => {
 	if (sendingComment.value) return;
-	// console.log(e.key);
 	if (!visible.value && e.ctrlKey && e.key === "/") {
 		e.preventDefault();
 		showDialog();
@@ -65,7 +64,6 @@ const handleShortcut = async (e: KeyboardEvent) => {
 
 	if (visible.value && e.ctrlKey && e.key.toLowerCase() === "enter" && !sendingComment.value) {
 		e.preventDefault();
-		// console.log('Sending comment..');
 		await submitComment();
 	}
 };
@@ -83,18 +81,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<Dialog
-		v-model:visible="visible"
-		modal
-		class="bg-surface-0 origin-bottom-right lg:max-w-4/5 h-[92vh]"
-		dismissable-mask
-		close-on-escape
-		block-scroll
-		maximizable
-		:draggable="false"
-		keep-in-viewport
-		:breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
-	>
+	<Dialog v-model:visible="visible" modal class="bg-surface-0 origin-bottom-right lg:max-w-4/5 h-[92vh]"
+		dismissable-mask close-on-escape block-scroll maximizable :draggable="false" keep-in-viewport
+		:breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
 		<template #header>
 			<h2 class="font-semibold text-base mr-2 truncate">
 				Comment on ⇒
@@ -102,13 +91,10 @@ onUnmounted(() => {
 			</h2>
 		</template>
 		<template #maximizeicon="{ maximized }">
-			<span
-				class="text-primary-500 font-semibold italic"
-				:class="{
-					'pi pi-arrow-down-left-and-arrow-up-right-to-center': maximized,
-					'pi pi-arrow-up-right-and-arrow-down-left-from-center': !maximized,
-				}"
-			></span>
+			<span class="text-primary-500 font-semibold italic" :class="{
+				'pi pi-arrow-down-left-and-arrow-up-right-to-center': maximized,
+				'pi pi-arrow-up-right-and-arrow-down-left-from-center': !maximized,
+			}"></span>
 		</template>
 		<template #closeicon>
 			<kbd class="text-primary-500 font-semibold italic">ESC</kbd>
@@ -117,30 +103,14 @@ onUnmounted(() => {
 			<div class="flex flex-col max-w-full lg:min-w-xl h-full max-h-full">
 				<form @submit.prevent>
 					<div class="flex flex-col gap-2 w-full">
-						<InputText
-							placeholder="Nickname"
-							class="w-full"
-							size="small"
-							v-model="nickname"
-							:autofocus="nickname == null"
-							required
-						/>
-						<Textarea
-							placeholder="Add comment.."
-							class="flex-1 grow w-full"
-							rows="4"
-							size="small"
-							v-model="content"
-							:autofocus="nickname != null"
-							auto-resize
-							required
-						></Textarea>
+						<InputText placeholder="Nickname" class="w-full" size="small" v-model="nickname"
+							:autofocus="nickname == null" required />
+						<Textarea placeholder="Add comment.." class="flex-1 grow w-full" rows="4" size="small"
+							v-model="content" :autofocus="nickname != null" auto-resize required></Textarea>
 						<Button class="relative w-full" size="small" type="submit" @click="submitComment">
 							Submit
-							<Chip
-								icon="pi pi-microsoft"
-								class="absolute translate-x-14 py-[0.5px] pl-0.5 pr-1 gap-px bg-primary-200"
-							>
+							<Chip icon="pi pi-microsoft"
+								class="absolute translate-x-14 py-[0.5px] pl-0.5 pr-1 gap-px bg-primary-200">
 								<template #default>
 									<kbd class="text-primary-500 font-semibold text-xs italic">CTRL+↲</kbd>
 									<!-- ↵ -->
@@ -175,13 +145,12 @@ onUnmounted(() => {
 							<div v-for="(item, index) in items" :key="index" :id="item.id" class="relative mb-5 mx-0">
 								<div class="flex flex-row gap-1.5 w-full p-0 mb-2">
 									<div class="w-auto">
-										<h4 class="text-base font-medium text-primary w-full" v-html="item.nickname"></h4>
+										<h4 class="text-base font-medium text-primary w-full" v-html="item.nickname">
+										</h4>
 									</div>
 									<span class="size-1 my-auto bg-primary"></span>
-									<p
-										v-if="item.createdAt"
-										class="text-[10px] text-surface-600 leading-[1.6rem] lg:text-[11px] w-auto"
-									>
+									<p v-if="item.createdAt"
+										class="text-[10px] text-surface-600 leading-[1.6rem] lg:text-[11px] w-auto">
 										{{
 											new Date(item.createdAt).toLocaleDateString("en-ID", {
 												day: "numeric",
@@ -192,12 +161,14 @@ onUnmounted(() => {
 									</p>
 									<div class="flex-1 grow"></div>
 								</div>
-								<p class="p-0 text-xs text-surface-800 leading-tight line-clamp-1" v-html="item.content"></p>
+								<p class="p-0 text-xs text-surface-800 leading-tight line-clamp-1"
+									v-html="item.content"></p>
 							</div>
 						</template>
 
 						<template #empty>
-							<div class="w-full h-32 flex justify-center text-center content-center align-middle text-xl">
+							<div
+								class="w-full h-32 flex justify-center text-center content-center align-middle text-xl">
 								No comments
 							</div>
 						</template>

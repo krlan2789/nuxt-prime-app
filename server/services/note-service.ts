@@ -1,14 +1,15 @@
 import { H3Event, EventHandlerRequest } from "h3";
-import INoteContent, { INoteContentRaw } from "~/utils/models/INoteContent";
+import INoteContent, { INoteContentRaw, INoteGroupRaw } from "~/utils/models/INoteContent";
 import generateSlugFromUrl from "~/utils/generate-slug-from-url";
 import containerRegistry from "~~/server/libs/container-registry";
-import { INoteService, MarkdownContentTransform } from "~~/server/libs/contracts/INoteService";
+import { INoteService, INoteServiceFilter, MarkdownContentTransform } from "~~/server/libs/contracts/INoteService";
 import { IS3ClientService, S3ClientServiceToken } from "~~/server/libs/contracts/IS3ClientService";
 import { CacheServiceToken, ICacheService } from "~~/server/libs/contracts/ICacheService";
 import parseGithubReadme from "../libs/parse-github-readme";
 
 export class NoteService implements INoteService {
-	private key = "notes.json";
+	private notesKey = "notes.json";
+	private groupKey = "group.json";
 	private s3ClientService: IS3ClientService;
 	private cacheService: ICacheService;
 
@@ -17,15 +18,7 @@ export class NoteService implements INoteService {
 		this.cacheService = containerRegistry.resolve<ICacheService>(CacheServiceToken, event) || (() => { throw new Error('Failed to resolve CacheService in NoteService'); })();
 	}
 
-	public async getListNotes(filters?: {
-		tags?: string[] | string;
-		lastFirst?: boolean;
-		earlyFirst?: boolean;
-	}): Promise<INoteContent[] | null> {
-		// Fetch notes list from S3
-		const obj = await this.s3ClientService.fetchStringObject(this.key);
-		const raw = JSON.parse(obj?.data || "[]") as INoteContentRaw[];
-
+	private convertRawContent(raw: INoteContentRaw[], filters?: INoteServiceFilter): INoteContent[] {
 		// Filter and map notes
 		let notes: INoteContent[] = [];
 		if (raw) {
@@ -45,22 +38,23 @@ export class NoteService implements INoteService {
 				}
 				filterTags = new Set(tagsArray);
 			}
+			const path = '/notes/' + filters?.slug;
 			notes = raw
 				.filter((e) => {
-					if (filterTags && filterTags.size > 0) {
-						return e.tags?.some((tag) => filterTags!.has(tag.toLowerCase()));
-					}
+					if (filters?.slug && !e.source.url.startsWith(path)) return false;
+					if (filterTags && filterTags.size > 0) return e.tags?.some((tag) => filterTags!.has(tag.toLowerCase()));
 					return true;
 				})
 				.map((e) => {
+					const toRemoves = [".md", ".mdx", "/notes/"];
 					const formatted = {
-						slug: generateSlugFromUrl(e.source.url),
+						slug: generateSlugFromUrl(e.source.url, { toRemoves, dontSplit: e.source.type == "s3" }),
 						title: e.title,
 						description: e.description,
 						date: e.date,
 						tags: e.tags,
 					};
-					this.cacheService.set<INoteContentRaw>(formatted.slug, e);
+					if (!filters?.secretCode) this.cacheService.set<INoteContentRaw>(formatted.slug, e);
 					return formatted;
 				});
 		}
@@ -76,39 +70,101 @@ export class NoteService implements INoteService {
 		return notes;
 	}
 
-	public async getNoteContentBySlug(slug: string): Promise<MarkdownContentTransform | undefined> {
-		const cachedSize = await this.cacheService.count();
-		if (cachedSize == 0) {
-			await this.getListNotes();
-		}
-		const cached = await this.cacheService.get<INoteContentRaw>(slug);
-		if (cached == null) return undefined;
-		const sourceType = cached?.source.type;
-		const sourceUrl = cached?.source.url;
+	public async getListNotes(filters?: INoteServiceFilter): Promise<INoteContent[] | null> {
+		// Fetch notes list from S3
+		const obj = filters?.secretCode
+			? await this.s3ClientService.fetchStringSecretObject(this.notesKey)
+			: await this.s3ClientService.fetchStringObject(this.notesKey);
+		const raw = JSON.parse(obj?.data || "[]") as INoteContentRaw[];
+		return this.convertRawContent(raw, filters);
+	}
 
-		// Fetch markdown content based on type
+	public async getSecretNoteMetadata(slug: string): Promise<INoteContentRaw | null> {
+		const notesObj = await this.s3ClientService.fetchStringSecretObject(this.notesKey);
+		const groupObj = await this.s3ClientService.fetchStringSecretObject(this.groupKey);
+		const notesRaw = JSON.parse(notesObj?.data || "[]") as INoteContentRaw[];
+		const groupRaw = JSON.parse(groupObj?.data || "[]") as INoteGroupRaw[];
+		const path = '/notes/' + slug;
+		const note = notesRaw.find((e) => e.source.url == path + '.md');
+		const group = groupRaw.find((e) => note?.source.url.startsWith(e.directory) || e.directory == path);
+		if (group && !note) return {
+			title: group.title,
+			date: "",
+			description: "",
+			source: {
+				type: "s3",
+				url: group.directory,
+			},
+			secret: group.secret,
+			tags: [group.type, group.purpose],
+			status: 'group',
+		};
+		if (note) return {
+			...note,
+			secret: group?.secret,
+			status: 'note',
+		}
+		return null;
+	}
+
+	public async getNoteContentBySlug(slug: string, secret?: string): Promise<MarkdownContentTransform | undefined> {
 		let markdownRaw: string | undefined;
-		if (sourceType == "github") {
-			markdownRaw = await parseGithubReadme(sourceUrl);
-		} else if (sourceType == "s3") {
-			const obj = await this.s3ClientService.fetchStringObject(sourceUrl);
+		let title: string;
+		let description: string;
+		let date: string;
+		let tags: string[] | undefined;
+		let sourceUrl: string;
+		let sourceType: string;
+
+		if (secret) {
+			const cached = await this.getSecretNoteMetadata(slug);
+			if (cached == null) return undefined;
+			if (cached.secret !== secret) return undefined;
+			title = cached.title;
+			description = cached.description;
+			date = cached.date;
+			tags = cached.tags;
+			sourceUrl = cached?.source.url;
+			sourceType = cached?.source.type;
+
+			const obj = await this.s3ClientService.fetchStringSecretObject(sourceUrl);
 			markdownRaw = obj?.data;
 		} else {
-			return undefined;
+			const cachedSize = await this.cacheService.count();
+			if (cachedSize == 0) {
+				await this.getListNotes();
+			}
+			const cached = await this.cacheService.get<INoteContentRaw>(slug);
+			if (cached == null) return undefined;
+			title = cached.title;
+			description = cached.description;
+			date = cached.date;
+			tags = cached.tags;
+			sourceUrl = cached?.source.url;
+			sourceType = cached?.source.type;
+
+			// Fetch markdown content based on type
+			if (sourceType == "github") {
+				markdownRaw = await parseGithubReadme(sourceUrl);
+			} else if (sourceType == "s3") {
+				const obj = await this.s3ClientService.fetchStringObject(sourceUrl);
+				markdownRaw = obj?.data;
+			} else {
+				return undefined;
+			}
 		}
 
 		const results: MarkdownContentTransform = {
 			metadata: {
-				title: cached.title,
-				description: cached.description,
-				date: cached.date,
-				tags: cached.tags,
+				title: title,
+				description: description,
+				date: date,
+				tags: tags,
 				url: sourceUrl,
 				type: sourceType,
 			},
 			content: markdownRaw,
 		};
-		// console.log(results.metadata, results.content?.length);
 		return results;
 	}
 }

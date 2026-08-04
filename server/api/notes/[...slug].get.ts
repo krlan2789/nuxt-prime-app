@@ -10,16 +10,20 @@ export default defineEventHandler(async (event): Promise<BaseResponseDto> => {
 	};
 
 	const slug = getRouterParam(event, "slug") ?? "";
+	const query = getQuery(event) as { secret?: string };
+	let secret = query.secret;
 
 	const noteService = containerRegistry.resolve<INoteService>(NoteServiceToken, event);
 	if (!noteService) {
-		console.error(res);
+		console.log(res);
 		throw createError(res);
 	}
-	const markdownContent = await noteService.getNoteContentBySlug(slug);
+
+	const markdownContent = await noteService.getNoteContentBySlug(slug, secret);
 
 	// Convert markdown to HTML
 	if (markdownContent && markdownContent.content) {
+		console.log('markdownContent.content.length: ' + markdownContent.content.length);
 		// Apply transformations
 		let tokens = mdToHtml.parse(markdownContent.content);
 		tokens = mdToHtml.addCodeHighlightAndCopyBtn(tokens);
@@ -39,10 +43,4 @@ export default defineEventHandler(async (event): Promise<BaseResponseDto> => {
 		console.error(res);
 		throw createError(res);
 	}
-	// try {
-	// } catch (err) {
-	// 	res.cause = [{ field: "exception", message: JSON.stringify(err) }];
-	// 	console.error(res);
-	// 	throw createError(res);
-	// }
 });

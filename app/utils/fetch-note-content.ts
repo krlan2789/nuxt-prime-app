@@ -1,12 +1,11 @@
-type NoteContentType = {
-	content?: string;
-	metadata: { title: string, description: string, tags?: string[], date?: string }
-};
+import type { NoteContentType } from "./models/INoteContent";
 
-export default async (slug: string): Promise<NoteContentType | undefined> => {
+export default async (slug: string, secret?: string): Promise<NoteContentType | undefined> => {
 	const { data } = await useAsyncData(slug, async () => {
 		let json: NoteContentType | undefined;
-		await $fetch<{ data: NoteContentType }>(`api/notes/${slug}`)
+		let noteUrl = `/api/notes/${slug}`;
+		if (secret) noteUrl += '?secret=' + secret;
+		await $fetch<{ data: NoteContentType }>(noteUrl, { method: "get" })
 			.then(res => {
 				json = res.data;
 			})

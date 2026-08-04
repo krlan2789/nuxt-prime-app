@@ -1,5 +1,7 @@
 import { H3Event, EventHandlerRequest } from "h3";
 import containerRegistry from "~~/server/libs/container-registry";
+import { IAuthService, AuthServiceToken } from "../libs/contracts/IAuthService";
+import { AuthService } from "../services/auth-service";
 import { IFirebaseService, FirebaseServiceToken } from "~~/server/libs/contracts/IFirebaseService";
 import { FirebaseService } from "~~/server/services/firebase-service";
 import { IS3ClientService, S3ClientServiceToken } from "~~/server/libs/contracts/IS3ClientService";
@@ -13,6 +15,7 @@ import { CommentService } from "~~/server/services/comment-service";
 
 export default defineNitroPlugin(() => {
     console.log('Registering services to containerRegistry..');
+    containerRegistry.registerScoped<IAuthService>(AuthServiceToken, (event: H3Event<EventHandlerRequest>) => new AuthService(event));
     containerRegistry.registerScoped<ICacheService>(CacheServiceToken, (event: H3Event<EventHandlerRequest>) => new CacheService(event));
     containerRegistry.registerScoped<IFirebaseService>(FirebaseServiceToken, (event: H3Event<EventHandlerRequest>) => new FirebaseService(event));
     containerRegistry.registerScoped<IS3ClientService>(S3ClientServiceToken, (event: H3Event<EventHandlerRequest>) => new S3ClientService(event));

@@ -8,22 +8,28 @@ export default async (filters?: {
 	limit?: number;
 	latestFirst?: boolean;
 	earliestFirst?: boolean;
+	secretCode?: string;
+	slug?: string;
 }): Promise<INoteContent[]> => {
-	const json = await $fetch<NotesType>("api/notes", {
+	const json = await $fetch<NotesType>("/api/notes", {
 		method: "GET",
 		query: {
 			tags: filters?.tags ? Array.from(filters.tags).join(",") : undefined,
+			secretCode: filters?.secretCode,
+			slug: filters?.slug,
 		},
 	});
 	let notesRaw = json.data;
 
 	// Cache notes in localStorage
-	if (notesRaw) {
-		localStorage.setItem("all-notes", JSON.stringify(notesRaw));
-	} else {
-		const localNotes = localStorage.getItem("all-notes");
-		if (localNotes) {
-			notesRaw = JSON.parse(localNotes) as INoteContent[];
+	if (!filters?.secretCode) {
+		if (notesRaw) {
+			localStorage.setItem("all-notes", JSON.stringify(notesRaw));
+		} else {
+			const localNotes = localStorage.getItem("all-notes");
+			if (localNotes) {
+				notesRaw = JSON.parse(localNotes) as INoteContent[];
+			}
 		}
 	}
 
@@ -36,12 +42,6 @@ export default async (filters?: {
 	}));
 	if (filters && notes) {
 		let filteredNotes = notes;
-		// console.log('filteredNotes:', filteredNotes);
-		// if (filters.tags && filters.tags.size > 0) {
-		// 	filteredNotes = filteredNotes.filter((note) =>
-		// 		note.tags?.some(tag => filters.tags!.has(tag.toLowerCase()))
-		// 	);
-		// }
 		if (filters.keyword) {
 			const keyword = filters.keyword.toLowerCase();
 			filteredNotes = filteredNotes.filter(

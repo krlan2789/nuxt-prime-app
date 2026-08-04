@@ -10,7 +10,7 @@ export interface IListItemData {
 
 export interface ListItemComponentProps extends IListItemData {
 	index?: number;
-	onItemClicked?: (keyword: IListItemData) => void;
+	onItemClicked?: (data: IListItemData) => void;
 }
 
 export class ListItemEventName {
